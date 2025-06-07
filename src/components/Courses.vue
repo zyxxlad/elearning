@@ -43,20 +43,14 @@ onMounted(async () => {
 
       <!-- Shoe course listing when done loading -->
       <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Course
-          v-for="course in state.courses.slice(0, limit || state.courses.length)"
-          :key="course.id"
-          :course="course"
-        />
+        <Course v-for="course in state.courses.slice(0, limit || state.courses.length)" :key="course.id"
+          :course="course" />
       </div>
     </div>
   </section>
 
   <section v-if="showButton" class="m-auto max-w-lg my-10 px-6">
-    <RouterLink
-      to="/courses"
-      class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700"
-      >View All Courses</RouterLink
-    >
+    <RouterLink to="/courses" class="block bg-black text-white text-center py-4 px-6 rounded-xl hover:bg-gray-700">
+      Посмотреть все курсы</RouterLink>
   </section>
 </template>

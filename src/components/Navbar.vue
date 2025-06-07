@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router';
-import logo from '@/assets/logo.svg';
+import logo from '@/assets/img/school.png';
 
 const isActiveLink = (routePath) => {
   const route = useRoute();
@@ -15,7 +15,7 @@ const isActiveLink = (routePath) => {
         <div class="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
           <!-- Logo -->
           <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
-            <img class="h-10 w-auto" :src="logo" alt="Vue Jobs" />
+            <img class="h-10 w-auto" :src="logo" alt="Всезнайка" />
             <span class="hidden md:block text-white text-2xl font-bold ml-2">Всезнайка</span>
           </RouterLink>
           <div class="md:ml-auto">
@@ -47,24 +47,6 @@ const isActiveLink = (routePath) => {
                 'py-2',
                 'rounded-md',
               ]">Добавить курс</RouterLink>
-              <RouterLink to="/jobs" :class="[
-                isActiveLink('/jobs')
-                  ? 'bg-green-900'
-                  : 'hover:bg-gray-900 hover:text-white',
-                'text-white',
-                'px-3',
-                'py-2',
-                'rounded-md',
-              ]">Jobs</RouterLink>
-              <RouterLink to="/jobs/add" :class="[
-                isActiveLink('/jobs/add')
-                  ? 'bg-green-900'
-                  : 'hover:bg-gray-900 hover:text-white',
-                'text-white',
-                'px-3',
-                'py-2',
-                'rounded-md',
-              ]">Add Job</RouterLink>
             </div>
           </div>
         </div>
