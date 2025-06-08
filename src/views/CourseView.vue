@@ -4,13 +4,16 @@ import BackButton from '@/components/BackButton.vue';
 import { reactive, onMounted } from 'vue';
 import { useRoute, RouterLink, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import axios from 'axios';
+import { getDatabase, ref, onValue, remove, off } from "firebase/database";
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
+const db = getDatabase();
+
 const courseId = route.params.id;
+var courseRef = {};
 
 const state = reactive({
   course: {},
@@ -21,7 +24,8 @@ const deleteCourse = async () => {
   try {
     const confirm = window.confirm('Вы уверены что хотите удалить этот курс?');
     if (confirm) {
-      await axios.delete(`/api/courses/${courseId}`);
+      off(courseRef);
+      remove(courseRef);
       toast.success('Курс успешно удален');
       router.push('/courses');
     }
@@ -33,12 +37,16 @@ const deleteCourse = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/courses/${courseId}`);
-    state.course = response.data;
+    courseRef = ref(db, `courses/${courseId}`);
+    onValue(courseRef, (snapshot) => {
+      var c = snapshot.val();
+      c.id = courseId;
+      state.course = c;
+
+      state.isLoading = false;
+    });
   } catch (error) {
     console.error('Error fetching course', error);
-  } finally {
-    state.isLoading = false;
   }
 });
 </script>

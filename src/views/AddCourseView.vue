@@ -2,7 +2,7 @@
 import router from '@/router';
 import { reactive } from 'vue';
 import { useToast } from 'vue-toastification';
-import axios from 'axios';
+import { getDatabase, ref, push, set } from "firebase/database";
 
 const form = reactive({
   category: 'История',
@@ -14,6 +14,9 @@ const form = reactive({
 
 const toast = useToast();
 
+const db = getDatabase();
+const coursesRef = ref(db, 'courses');
+
 const handleSubmit = async () => {
   const newCourse = {
     title: form.title,
@@ -24,9 +27,11 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.post('/api/courses', newCourse);
+    const newCoursesRef = push(coursesRef);
+    set(newCoursesRef, newCourse);
+
     toast.success('Курс успешно добавлен');
-    router.push(`/courses/${response.data.id}`);
+    router.push(`/courses/${newCoursesRef.key}`);
   } catch (error) {
     console.error('Ошибка при добавлении курса', error);
     toast.error('Курс не был добавлен');

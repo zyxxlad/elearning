@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router';
 import Course from './Course.vue';
 import { reactive, defineProps, onMounted } from 'vue';
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import axios from 'axios';
+import { getDatabase, ref, onValue } from "firebase/database";
 
 defineProps({
   limit: Number,
@@ -18,16 +18,27 @@ const state = reactive({
   isLoading: true,
 });
 
+const db = getDatabase();
+
 onMounted(async () => {
   try {
-    const response = await axios.get('/api/courses');
-    state.courses = response.data;
+    const coursesRef = ref(db, 'courses/');
+    onValue(coursesRef, (snapshot) => {
+      const courses = [];
+      snapshot.forEach(snapshotChild => {
+        var course = snapshotChild.val();
+        course.id = snapshotChild.key;
+        courses.push(course);
+      });
+      state.courses = courses;
+      state.isLoading = false;
+    });
+
   } catch (error) {
     console.error('Error fetching courses', error);
-  } finally {
-    state.isLoading = false;
   }
 });
+
 </script>
 
 <template>

@@ -3,11 +3,14 @@ import router from '@/router';
 import { reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import axios from 'axios';
+import { getDatabase, ref, set, onValue, off } from "firebase/database";
 
 const route = useRoute();
 
+const db = getDatabase();
+
 const courseId = route.params.id;
+var courseRef = {};
 
 const form = reactive({
   category: 'История',
@@ -34,9 +37,11 @@ const handleSubmit = async () => {
   };
 
   try {
-    const response = await axios.put(`/api/courses/${courseId}`, updatedCourse);
+    off(courseRef);
+    set(courseRef, updatedCourse);
+
     toast.success('Курс успешно обновлен!');
-    router.push(`/courses/${response.data.id}`);
+    router.push(`/courses/${courseRef.key}`);
   } catch (error) {
     console.error('Ошибка при обновлении курса', error);
     toast.error('Курс не был обновлен');
@@ -45,18 +50,23 @@ const handleSubmit = async () => {
 
 onMounted(async () => {
   try {
-    const response = await axios.get(`/api/courses/${courseId}`);
-    state.course = response.data;
-    // Populate inputs
-    form.category = state.course.category;
-    form.title = state.course.title;
-    form.description = state.course.description;
-    form.date = state.course.date;
-    form.duration = state.course.duration;
+
+    courseRef = ref(db, `courses/${courseId}`);
+    onValue(courseRef, (snapshot) => {
+      var c = snapshot.val();
+      c.id = courseId;
+      state.course = c;
+
+      form.category = state.course.category;
+      form.title = state.course.title;
+      form.description = state.course.description;
+      form.date = state.course.date;
+      form.duration = state.course.duration;
+
+      state.isLoading = false;
+    });
   } catch (error) {
     console.error('Ошибка при обновлении курса', error);
-  } finally {
-    state.isLoading = false;
   }
 });
 </script>
