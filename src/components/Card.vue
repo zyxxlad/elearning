@@ -1,8 +1,8 @@
 <script setup>
 import { defineProps } from 'vue';
 
-defineProps({
-  bg: {
+defineProps({//параметры компонента
+  bg: {//параметр для определения цвета фона плитки
     type: String,
     default: 'bg-gray-100',
   },

@@ -3,5 +3,5 @@ import Courses from '@/components/Courses.vue';
 </script>
 
 <template>
-  <Courses />
+  <Courses /><!-- Компонент для отображения всех курсов -->
 </template>

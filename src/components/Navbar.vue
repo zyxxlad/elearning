@@ -2,6 +2,7 @@
 import { RouterLink, useRoute } from 'vue-router';
 import logo from '@/assets/img/school.png';
 
+//в зависимости от текущей страницы, "подсвечивать" соответвующую кнопку в навигационной шапке сайта
 const isActiveLink = (routePath) => {
   const route = useRoute();
   return route.path === routePath;
@@ -13,7 +14,7 @@ const isActiveLink = (routePath) => {
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="flex h-20 items-center justify-between">
         <div class="flex flex-1 items-center justify-center md:items-stretch md:justify-start">
-          <!-- Logo -->
+          <!-- Иконка сайта -->
           <RouterLink class="flex flex-shrink-0 items-center mr-4" to="/">
             <img class="h-10 w-auto" :src="logo" alt="Всезнайка" />
             <span class="hidden md:block text-white text-2xl font-bold ml-2">Всезнайка</span>

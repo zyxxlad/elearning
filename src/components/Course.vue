@@ -2,16 +2,18 @@
 import { RouterLink } from 'vue-router';
 import { defineProps, ref, computed } from 'vue';
 
-const props = defineProps({
-  course: Object,
+const props = defineProps({//параметры компонента
+  course: Object, //курс, который надо отобразить
 });
 
-const showFullDescription = ref(false);
+const showFullDescription = ref(false); //показывать ли полное описание курса
 
+//функция, срабатывает при нажатии кнопки "больше" на плитке курса. 
 const toggleFullDescription = () => {
-  showFullDescription.value = !showFullDescription.value;
+  showFullDescription.value = !showFullDescription.value;//переключает с короткого описание на полное и наоборот
 };
 
+//вычисляемая переменная, определяет короткое/полное описание курса
 const truncatedDescription = computed(() => {
   let description = props.course.description;
   if (!showFullDescription.value) {
@@ -31,10 +33,10 @@ const truncatedDescription = computed(() => {
 
       <div class="mb-5">
         <div>
-          {{ truncatedDescription }}
+          {{ truncatedDescription }}<!--описание курса-->
         </div>
         <button @click="toggleFullDescription" class="text-green-500 hover:text-green-600 mb-5">
-          {{ showFullDescription ? 'Меньше' : 'Больше' }}
+          {{ showFullDescription ? 'Меньше' : 'Больше' }} <!--кнопка больше/меньше-->
         </button>
       </div>
 
@@ -47,6 +49,7 @@ const truncatedDescription = computed(() => {
           <i class="pi pi-clock text-orange-700"></i>
           {{ course.date }}
         </div>
+        <!--кнопка-ссылка на страницу с подробным описанием описанием курса-->
         <RouterLink :to="'/courses/' + course.id"
           class="h-[36px] bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-center text-sm">
           Подробнее
